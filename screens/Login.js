@@ -1,20 +1,20 @@
-import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
+import { Ionicons } from '@expo/vector-icons';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { Ionicons } from '@expo/vector-icons';
-
 import { useLanguage } from '../utils/LanguageProvider';
 import { useTheme } from '../utils/ThemeProvider';
-
-import lightColors from '../assets/colors/lightColors';
-import darkColors from '../assets/colors/darkColors';
-import turkish from '../assets/languages/turkish';
-import english from '../assets/languages/english';
-import { Linking } from 'react-native';
 import { useUser } from '../utils/UserProvider';
+
+import darkColors from '../assets/colors/darkColors';
+import lightColors from '../assets/colors/lightColors';
+import english from '../assets/languages/english';
+import turkish from '../assets/languages/turkish';
+
+import { Linking } from 'react-native';
 import Button from '../components/Button';
 
 const { width, height } = Dimensions.get("screen");
@@ -49,11 +49,12 @@ const Login = ({ navigation }) => {
 
     return (
         <Formik
+
             initialValues={{ email: '', password: '' }}
             validationSchema={LoginSchema}
             onSubmit={(values) => {
                 setUser(values);
-                navigation.navigate('Main');
+                navigation.navigate('MainPage');
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
@@ -74,7 +75,7 @@ const Login = ({ navigation }) => {
                         onChangeText={handleChange('email')}
                         onBlur={handleBlur('email')}
                         value={values.email}
-                        placeholder="E-posta adresi"
+                        placeholder={lingo.PlaceHolderEMail}
                         placeholderTextColor={theme.PlaceHolder}
                     />
                     {touched.email && errors.email && <Text style={{ marginLeft: "15%", marginTop: - 20, marginBottom: 20, color: theme.Unneccessary }}>{errors.email}</Text>}
@@ -87,7 +88,7 @@ const Login = ({ navigation }) => {
                             onChangeText={handleChange('password')}
                             onBlur={handleBlur('password')}
                             value={values.password}
-                            placeholder={"Şifre"}
+                            placeholder={lingo.PlaceHolderPassword}
                             secureTextEntry={!isVisiblePassword}
                             autoCapitalize={"none"}
                             placeholderTextColor={theme.PlaceHolder}
@@ -98,7 +99,7 @@ const Login = ({ navigation }) => {
                     </View>
                     {touched.password && errors.password && <Text style={{ marginLeft: "15%", marginTop: - 20, marginBottom: 20, color: theme.Unneccessary }}>{errors.password}</Text>}
 
-                    <Button handleSubmit={handleSubmit} text={lingo.Login} width={"40%"} marginLeft={"30%"} />
+                    <Button handleSubmit={() => {navigation.navigate('MainPage');}} text={lingo.Login} width={"40%"} marginLeft={"30%"} />
                 </View>
             )
             }

@@ -4,11 +4,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 
-import { Draw } from "./screens/Draw"
+import Login from "./screens/Login"
 import MainPage from "./screens/MainPage"
 
 import { LanguageProvider } from "./utils/LanguageProvider";
 import { ThemeProvider } from "./utils/ThemeProvider";
+import { UserProvider } from "./utils/UserProvider";
 //import { ItemsProvider } from "./utils/ItemsProvider";
 
 const Navigation = () => {
@@ -28,14 +29,16 @@ const Navigation = () => {
 
     return (
         <NavigationContainer onStateChange={handleNavigationStateChange}>
-            <LanguageProvider>
-                <ThemeProvider>
-                    <Stack.Navigator initialRouteName="Login" screenOptions={screenOptions} >
-                        <Stack.Screen name="Login" component={Login} />
-                        <Stack.Screen name="MainPage" component={MainPage} />
-                    </Stack.Navigator>
-                </ThemeProvider>
-            </LanguageProvider>
+            <UserProvider>
+                <LanguageProvider>
+                    <ThemeProvider>
+                        <Stack.Navigator initialRouteName="Login" screenOptions={screenOptions} >
+                            <Stack.Screen name="Login" component={Login} />
+                            <Stack.Screen name="MainPage" component={MainPage} />
+                        </Stack.Navigator>
+                    </ThemeProvider>
+                </LanguageProvider>
+            </UserProvider>
         </NavigationContainer >
     )
 }
