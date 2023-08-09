@@ -6,7 +6,6 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import { useLanguage } from '../utils/LanguageProvider';
-import { useTheme } from '../utils/ThemeProvider';
 import { useUser } from '../utils/UserProvider';
 
 import darkColors from '../assets/colors/darkColors';
@@ -16,6 +15,7 @@ import turkish from '../assets/languages/turkish';
 
 import { Linking } from 'react-native';
 import Button from '../components/Button';
+import { StatusBar } from 'expo-status-bar';
 
 const { width, height } = Dimensions.get("screen");
 
@@ -26,9 +26,6 @@ const Login = ({ navigation }) => {
 
     const { language } = useLanguage();
     const lingo = language === "tr" ? turkish : english;
-
-    const { isDarkMode } = useTheme();
-    const theme = isDarkMode === "true" ? darkColors : lightColors;
 
     const LoginSchema = Yup.object().shape({
         email: Yup.string().email('Geçerli bir e-posta adresi girin.').required('E-posta adresi zorunludur.'),
@@ -58,32 +55,30 @@ const Login = ({ navigation }) => {
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                <View style={[styles.container, { backgroundColor: theme.Background }]}>
+                <View style={styles.container}>
 
                     <View>
                         <TouchableOpacity onPress={openWebsite} style={{ alignItems: "center", alignSelf: "center", marginBottom: height * 0.04 }}>
-                            <Image source={isDarkMode ? require("../assets/darkModeLogo.png") : require("../assets/lightModeLogo.png")} style={styles.logo} />
+                            <Image source={require("../assets/darkModeLogo.png")} style={styles.logo} />
                         </TouchableOpacity>
 
-                        <Text style={[styles.heading, { color: theme.Text }]}>{lingo.AppHeader}</Text>
+                        <Text style={[styles.heading]}>{lingo.AppHeader}</Text>
                     </View>
 
                     <TextInput
-                        style={[styles.input, {
-                            backgroundColor: theme.Input, borderColor: theme.Border, color: theme.InputText,
-                        }]}
+                        style={styles.input}
                         onChangeText={handleChange('email')}
                         onBlur={handleBlur('email')}
                         value={values.email}
                         placeholder={lingo.PlaceHolderEMail}
-                        placeholderTextColor={theme.PlaceHolder}
+                        placeholderTextColor={"#abbbbb"}
                     />
-                    {touched.email && errors.email && <Text style={{ marginLeft: "15%", marginTop: - 20, marginBottom: 20, color: theme.Unneccessary }}>{errors.email}</Text>}
+                    {touched.email && errors.email && <Text style={{ marginLeft: "15%", marginTop: - 20, marginBottom: 20, color: "#CCC" }}>{errors.email}</Text>}
 
-                    <View style={[styles.passwordInputContainer, { width: width * 0.75, backgroundColor: theme.Input, borderColor: theme.Border, }]}>
+                    <View style={[styles.passwordInputContainer, { width: width * 0.75, backgroundColor: "rgba(255,255,255,0.1)", }]}>
                         <TextInput
                             style={[styles.passwordInput, {
-                                width: width * 0.75 * 0.775, backgroundColor: theme.Input, color: theme.InputText,
+                                width: width * 0.75 * 0.775, color: "white",
                             }]}
                             onChangeText={handleChange('password')}
                             onBlur={handleBlur('password')}
@@ -91,19 +86,22 @@ const Login = ({ navigation }) => {
                             placeholder={lingo.PlaceHolderPassword}
                             secureTextEntry={!isVisiblePassword}
                             autoCapitalize={"none"}
-                            placeholderTextColor={theme.PlaceHolder}
+                            placeholderTextColor={"#abbbbb"}
                         />
-                        <TouchableOpacity style={{ borderRadius: width * 0.1, borderWidth: 1, borderColor: theme.Border, padding: 5 }} onPress={() => { setisVisiblePassword(prev => !prev) }}>
-                            <Ionicons name={isVisiblePassword ? "eye-off-outline" : "eye-outline"} size={20} color={theme.Icon} />
+                        <TouchableOpacity style={{ borderRadius: width * 0.1, padding: 5, }} onPress={() => { setisVisiblePassword(prev => !prev) }}>
+                            <Ionicons name={isVisiblePassword ? "eye-off-outline" : "eye-outline"} size={20} color={"#DDD"} />
                         </TouchableOpacity>
                     </View>
-                    {touched.password && errors.password && <Text style={{ marginLeft: "15%", marginTop: - 20, marginBottom: 20, color: theme.Unneccessary }}>{errors.password}</Text>}
+                    {touched.password && errors.password && <Text style={{ marginLeft: "15%", marginTop: - 20, marginBottom: 20, color: "#CCC", }}>{errors.password}</Text>}
 
-                    <Button handleSubmit={() => {navigation.navigate('MainPage');}} text={lingo.Login} width={"40%"} marginLeft={"30%"} />
+                    <Button handleSubmit={() => { navigation.navigate('MainPage'); }} text={lingo.Login} width={"40%"} marginLeft={"30%"} />
+
+                    <StatusBar translucent={true} style='auto' animated={true} />
                 </View>
             )
             }
         </Formik >
+
     );
 };
 
@@ -111,6 +109,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
+        backgroundColor: "green",
     },
     logo: {
         width: width * 0.4564,
@@ -124,28 +123,30 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         textAlign: "center",
         marginTop: -20,
+        color: "white",
     },
     input: {
         width: "75%",
         marginLeft: "12.5%",
         paddingHorizontal: 20,
         paddingVertical: 10,
-        borderRadius: 40,
-        borderWidth: 1,
+        borderRadius: 15,
         marginBottom: 20,
         fontSize: 20,
+        backgroundColor: "rgba(255,255,255,0.1)",
+        color: "white",
     },
     passwordInputContainer: {
         flexDirection: "row",
-        borderWidth: 1,
         marginLeft: "12.5%",
-        borderRadius: 40,
+        borderRadius: 15,
         marginBottom: 20,
         paddingHorizontal: 20,
         paddingVertical: 10,
     },
     passwordInput: {
         fontSize: 20,
+        color: "white",
     },
 })
 

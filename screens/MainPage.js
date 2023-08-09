@@ -2,32 +2,32 @@ import { ScrollView, StyleSheet, Text, View, Dimensions, TouchableWithoutFeedbac
 import React, { useState } from 'react'
 
 import Header from "../components/Header"
-import SearchCalorie from "../components/SearchCalorie"
 import UserTotalCalorie from "../components/UserTotalCalorie"
 import UserAte from "../components/UserAte"
 import Button from '../components/Button';
+import { StatusBar } from 'expo-status-bar'
 
 const { width, height } = Dimensions.get("screen")
 
 const MainPage = ({ navigation }) => {
     const [openSearch, setOpenSearch] = useState(false);
 
+    const handle = () => {
+        navigation.navigate("Login");
+    }
+
     return (
         <View style={styles.container}>
-            <Modal visible={openSearch} transparent animationType={"slide"}>
-                <TouchableWithoutFeedback onPress={() => setOpenSearch(false)}>
-                    <View style={{ flex: 1, position: "absolute", width: width, height: height }} />
-                </TouchableWithoutFeedback>
-                <SearchCalorie />
-            </Modal>
+            <Header title={"Main"} handle={handle} name={"log-out-outline"} />
+            <View style={{ marginVertical: 10, }} />
+            <UserTotalCalorie />
 
-            <Header title={"Main"} />
-
-            <ScrollView>
-                <UserTotalCalorie />
-                <Button width={width * 0.5} marginLeft={width * 0.25} handleSubmit={() => setOpenSearch(true)} text={"Add"} />
+            <ScrollView style={styles.scroll}>
+                <Button width={width * 0.5} marginLeft={width * 0.25} handleSubmit={() => { navigation.navigate("SearchCalorie") }} text={"Add"} />
+                <View style={{ marginVertical: 10, }} />
                 <UserAte />
             </ScrollView>
+            <StatusBar translucent={true} style='light' animated={true} />
         </View>
     )
 }
@@ -36,7 +36,11 @@ export default MainPage
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
-        paddingTop: 40,
-    }
+        flex: 1,
+        backgroundColor: "green",
+    },
+    scroll: {
+        paddingHorizontal: 10,
+        marginTop: 20,
+    },
 })

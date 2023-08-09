@@ -1,15 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import { TouchableOpacity } from 'react-native'
+import React from 'react'
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const Header = ({ title }) => {
+const { width, height } = Dimensions.get("screen")
+
+const Header = ({ title, handle, name }) => {
     return (
         <View style={styles.container}>
-            <TouchableOpacity>
-                <Ionicons name='close' size={20} />
+            <TouchableOpacity onPress={handle}>
+                <Ionicons name={name} size={width * 0.075} color={"white"} />
             </TouchableOpacity>
-            <Text>{title}</Text>
+            <Text style={styles.text}>{title}</Text>
         </View>
     )
 }
@@ -18,8 +19,22 @@ export default Header
 
 const styles = StyleSheet.create({
     container: {
-        width: "100%",
+        width: width,
         alignItems: "center",
         flexDirection: "row",
+        height: height * 0.1,
+        paddingTop: 10,
+        paddingHorizontal: 10,
+        
+        backgroundColor: "rgba(255,255,255,0.1)",
+
+        borderBottomLeftRadius: 15,
+        borderBottomRightRadius: 15,
     },
+    text: {
+        fontSize: width * 0.075,
+        fontWeight: "bold",
+        marginLeft: 15,
+        color: "white",
+    }
 })

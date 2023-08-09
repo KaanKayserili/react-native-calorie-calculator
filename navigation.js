@@ -3,14 +3,14 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-
 import Login from "./screens/Login"
 import MainPage from "./screens/MainPage"
+import SearchCalorie from "./screens/SearchCalorie"
 
 import { LanguageProvider } from "./utils/LanguageProvider";
 import { ThemeProvider } from "./utils/ThemeProvider";
 import { UserProvider } from "./utils/UserProvider";
-//import { ItemsProvider } from "./utils/ItemsProvider";
+import { ItemsProvider } from "./utils/ItemsProvider";
 
 const Navigation = () => {
     const Stack = createStackNavigator();
@@ -32,10 +32,13 @@ const Navigation = () => {
             <UserProvider>
                 <LanguageProvider>
                     <ThemeProvider>
-                        <Stack.Navigator initialRouteName="Login" screenOptions={screenOptions} >
-                            <Stack.Screen name="Login" component={Login} />
-                            <Stack.Screen name="MainPage" component={MainPage} />
-                        </Stack.Navigator>
+                        <ItemsProvider>
+                            <Stack.Navigator initialRouteName="Login" screenOptions={screenOptions} >
+                                <Stack.Screen name="Login" component={Login} />
+                                <Stack.Screen name="MainPage" component={MainPage} />
+                                <Stack.Screen name="SearchCalorie" component={SearchCalorie} />
+                            </Stack.Navigator>
+                        </ItemsProvider>
                     </ThemeProvider>
                 </LanguageProvider>
             </UserProvider>
