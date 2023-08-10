@@ -1,22 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
+import { Dimensions } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+const { width } = Dimensions.get("screen")
 
-const renderSearchItem = () => {
-    return (
-        <View>
-            <View>
-                <Text>Karpuz</Text>
-                <Text>100 g</Text>
-            </View>
-            <Text>123 kcal</Text>
-            <TouchableOpacity>
-                <View style={{ backgroundColor: "white", }} />
-            </TouchableOpacity>
-        </View>
-    )
+export const renderSearchItem = ({ navigation, item }) => {
 }
-
-export default renderSearchItem
 
 const styles = StyleSheet.create({})

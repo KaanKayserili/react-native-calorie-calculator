@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./screens/Login"
 import MainPage from "./screens/MainPage"
 import SearchCalorie from "./screens/SearchCalorie"
+import { Details } from "./screens/Details"
 
 import { LanguageProvider } from "./utils/LanguageProvider";
 import { ThemeProvider } from "./utils/ThemeProvider";
@@ -37,6 +38,7 @@ const Navigation = () => {
                                 <Stack.Screen name="Login" component={Login} />
                                 <Stack.Screen name="MainPage" component={MainPage} />
                                 <Stack.Screen name="SearchCalorie" component={SearchCalorie} />
+                                <Stack.Screen name="Details" component={Details} />
                             </Stack.Navigator>
                         </ItemsProvider>
                     </ThemeProvider>

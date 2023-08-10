@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ItemsContext = createContext({});
+const ItemsContext = createContext([]);
 
 export const ItemsProvider = ({ children }) => {
-    const [foods, setFoods] = useState({});
+    const [foods, setFoods] = useState([]);
 
     useEffect(() => {
         const getFoods = async () => {
