@@ -23,9 +23,8 @@ const MainPage = ({ navigation }) => {
             <UserTotalCalorie />
 
             <ScrollView style={styles.scroll}>
-                <Button width={width * 0.5} marginLeft={width * 0.25} handleSubmit={() => { navigation.navigate("SearchCalorie") }} text={"Add"} />
                 <View style={{ marginVertical: 10, }} />
-                <UserAte />
+                <UserAte navigation={navigation} />
             </ScrollView>
             <StatusBar translucent={true} style='light' animated={true} />
         </View>

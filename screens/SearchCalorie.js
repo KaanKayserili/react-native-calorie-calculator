@@ -1,13 +1,12 @@
 import { StatusBar } from 'expo-status-bar'
 
 import React, { useState } from 'react'
-import { Dimensions, StyleSheet, View, FlatList, Modal, Text } from 'react-native'
+import { Dimensions, FlatList, Modal, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 
 import Button from '../components/Button'
 import Header from '../components/Header'
 import { NewTextInput } from '../components/TextInput'
 import { Loading } from '../components/loading'
-import RenderSearchItem from '../components/renderSearchItem'
 
 import { fetchFoodData } from '../service/api'
 
@@ -15,18 +14,21 @@ import english from '../assets/languages/english'
 import turkish from '../assets/languages/turkish'
 
 import { useLanguage } from '../utils/LanguageProvider'
-import { TouchableOpacity } from 'react-native'
+import { useFoods } from '../utils/ItemsProvider'
 
 const { width } = Dimensions.get("screen")
 
-const SearchCalorie = ({ navigation }) => {
-    const [foods, setFoods] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [food, setFood] = useState("");
-    const [searchedFoods, setSearchedFoods] = useState({});
+const SearchCalorie = ({ navigation, route }) => {
+    const { title } = route.params;
+
+    const { breakfasts, setBreakfasts, lunchs, setLunchs, dinners, setDinners, snacks, setSnacks, activities, setActivities } = useFoods();
 
     const { language } = useLanguage();
     const lingo = language === "tr" ? turkish : english;
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [food, setFood] = useState("");
+    const [searchedFoods, setSearchedFoods] = useState({});
 
     const handle = () => {
         navigation.navigate("MainPage");
@@ -46,7 +48,8 @@ const SearchCalorie = ({ navigation }) => {
             <Modal visible={isLoading} transparent>
                 <Loading />
             </Modal>
-            <Header title={"Search and Add"} handle={handle} name={"close"} />
+
+            <Header title={("Add " + title)} handle={handle} name={"close"} />
 
             <View style={{ marginVertical: 10, }} />
 
@@ -71,13 +74,67 @@ const SearchCalorie = ({ navigation }) => {
                                 <Text style={{ width: width * 0.3, fontSize: 14, color: "white", fontWeight: "600", }}>{item?.description} - 100 g</Text>
                                 <View style={{ width: width * 0.3, flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
                                     <Text style={{ fontSize: 14, textAlign: "center", color: "white", fontWeight: "600", width: width * 0.2 }}>{item?.foodNutrients[2]?.value + " kcal"}</Text>
-                                    <TouchableOpacity style={{ borderWidth: 2, borderColor: "white", borderRadius: 25, width: width * 0.1, height: width * 0.1, alignItems: "center", justifyContent: "center" }}
+                                    <TouchableOpacity style={{ borderWidth: 2, borderColor: "white", borderRadius: 25, width: width * 0.08, height: width * 0.08, alignItems: "center", justifyContent: "center" }}
                                         onPress={() => {
-                                            const updatedFoods = { ...foods, [item?.fdcId]: item };
-                                            setFoods(updatedFoods);
-                                            console.log(foods)
-                                        }}>
-                                        <View style={[styles.circle, foods.hasOwnProperty(item?.fdcId) ? { backgroundColor: "white", borderRadius: width * 0.7, } : {}]} />
+                                            let updatedFoods;
+
+                                            switch (title) {
+                                                case "Breakfast":
+                                                    updatedFoods = { ...breakfasts };
+                                                    if (updatedFoods[item?.fdcId]) {
+                                                        delete updatedFoods[item?.fdcId];
+                                                    } else {
+                                                        updatedFoods[item?.fdcId] = item;
+                                                    }
+                                                    setBreakfasts(updatedFoods);
+                                                    break;
+                                                case "Lunch":
+                                                    updatedFoods = { ...lunchs };
+                                                    if (updatedFoods[item?.fdcId]) {
+                                                        delete updatedFoods[item?.fdcId];
+                                                    } else {
+                                                        updatedFoods[item?.fdcId] = item;
+                                                    }
+                                                    setLunchs(updatedFoods);
+                                                    break;
+                                                case "Dinner":
+                                                    updatedFoods = { ...dinners };
+                                                    if (updatedFoods[item?.fdcId]) {
+                                                        delete updatedFoods[item?.fdcId];
+                                                    } else {
+                                                        updatedFoods[item?.fdcId] = item;
+                                                    }
+                                                    setDinners(updatedFoods);
+                                                    break;
+                                                case "Snack":
+                                                    updatedFoods = { ...snacks };
+                                                    if (updatedFoods[item?.fdcId]) {
+                                                        delete updatedFoods[item?.fdcId];
+                                                    } else {
+                                                        updatedFoods[item?.fdcId] = item;
+                                                    }
+                                                    setSnacks(updatedFoods);
+                                                    break;
+                                                default:
+                                                    updatedFoods = { ...activities };
+                                                    if (updatedFoods[item?.fdcId]) {
+                                                        delete updatedFoods[item?.fdcId];
+                                                    } else {
+                                                        updatedFoods[item?.fdcId] = item;
+                                                    }
+                                                    setActivities(updatedFoods);
+                                            }
+                                            console.log(updatedFoods);
+                                        }}
+                                    >
+                                        <View style={[styles.circle,
+                                        title === "Breakfast" && breakfasts.hasOwnProperty(item?.fdcId) ? { backgroundColor: "white", borderRadius: width * 0.08, } :
+                                            title === "Lunch" && lunchs.hasOwnProperty(item?.fdcId) ? { backgroundColor: "white", borderRadius: width * 0.08, } :
+                                                title === "Dinner" && dinners.hasOwnProperty(item?.fdcId) ? { backgroundColor: "white", borderRadius: width * 0.08, } :
+                                                    title === "Snack" && snacks.hasOwnProperty(item?.fdcId) ? { backgroundColor: "white", borderRadius: width * 0.08, } :
+                                                        title === "Activity" && activities.hasOwnProperty(item?.fdcId) ? { backgroundColor: "white", borderRadius: width * 0.08, } : {}
+                                        ]}
+                                        />
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -88,7 +145,7 @@ const SearchCalorie = ({ navigation }) => {
             </View>
 
             <StatusBar translucent={true} style='light' animated={true} />
-        </View>
+        </View >
     )
 }
 
@@ -120,8 +177,8 @@ const styles = StyleSheet.create({
         marginLeft: "5%",
     },
     circle: {
-        width: width * 0.07,
-        height: width * 0.07,
-        borderRadius: width * 0.035,
+        width: width * 0.05,
+        height: width * 0.05,
+        borderRadius: width * 0.025,
     },
 })
